@@ -28,11 +28,21 @@ def start(pk):
         client.on_disconnect = on_disconnect
         print(broker.endereco)
         # Conecta no MQTT Broker, no meu caso, o Mosquitto
-        client.connect(broker.endereco, int(broker.porta), 60)
+        try:
+            client.connect(broker.endereco, int(broker.porta), 60)
+        except:
+            broker.ESTADO_BROKER = 'off'
+            broker.save()
+            pass
         while broker.estado == 0:
             client.loop_start()
+            broker.ESTADO_BROKER = 1
+            broker.save()
             broker.refresh_from_db()
+        print("Refresh")
         client.disconnect()
+        broker.ESTADO_BROKER = 0
+        broker.save()
         print("desliguei")
     else:
         print("Sem Broker")
