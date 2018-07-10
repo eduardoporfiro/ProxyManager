@@ -30,18 +30,20 @@ def start(pk):
         # Conecta no MQTT Broker, no meu caso, o Mosquitto
         try:
             client.connect(broker.endereco, int(broker.porta), 60)
+            print("Iniciei")
+            broker.estado=2 #rodando
+            broker.save()
         except:
-            broker.ESTADO_BROKER = 'off'
+            print("erro")
+            broker.estado = 4 #não conectado
             broker.save()
-            pass
-        while broker.estado == 0:
+            return
+        while broker.estado == 2:
             client.loop_start()
-            broker.ESTADO_BROKER = 1
-            broker.save()
             broker.refresh_from_db()
         print("Refresh")
         client.disconnect()
-        broker.ESTADO_BROKER = 0
+        broker.estado = 0 #off
         broker.save()
         print("desliguei")
     else:
