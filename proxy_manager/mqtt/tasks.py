@@ -1,5 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-from celery import shared_task
 from proxy_manager.celery import app
 from mqtt.models import Broker, Mqtt
 from mqtt import runner as conect
