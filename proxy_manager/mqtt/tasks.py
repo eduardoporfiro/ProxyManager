@@ -8,12 +8,22 @@ logger = get_task_logger(__name__)
 
 @app.task
 def start():
-    topicos =[]
     for broker in Broker.objects.all():
         if (broker.estado == 0):
-            for mqtts in Mqtt.objects.all().filter(broker=broker):
-                topicos.append((mqtts.topico, 0))
-            conect.topico = topicos
-            broker.estado=1 #iniciando
-            broker.save()
-            conect.start(broker.pk)
+            iniciar(broker)
+
+def restart():
+    for broker in Broker.objects.all():
+        if(broker.estado == 4):#se estiver sem conexão
+            iniciar(broker)
+
+#função padrão para iniciar ou reiniciar
+def iniciar(broker):
+    topicos =[('proxy/parar', 0)]
+    for mqtts in Mqtt.objects.all().filter(broker=broker):
+        topicos.append((mqtts.topico, mqtts.QoS))
+    conect.topico = topicos
+    conect.pk = broker.pk
+    broker.estado = 1  # iniciando
+    broker.save()
+    conect.start()
