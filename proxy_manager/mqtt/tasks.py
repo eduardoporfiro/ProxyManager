@@ -11,10 +11,10 @@ def start():
     for broker in Broker.objects.all():
         if (broker.estado == 0):
             iniciar(broker)
-
+@app.task
 def restart():
     for broker in Broker.objects.all():
-        if(broker.estado == 4):#se estiver sem conexão
+        if(broker.estado == 4):#se estiver sem conexão ou parando
             iniciar(broker)
 
 #função padrão para iniciar ou reiniciar
