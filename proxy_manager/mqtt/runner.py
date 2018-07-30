@@ -3,6 +3,8 @@ from mqtt.models import Dado, Mqtt, Broker
 topico =0
 pk = 0
 def on_connect(client, userdata, flags, rc):
+    mqtt = Broker.objects.all().filter(id=pk).first().Mqtt
+    mqtt.RC = rc
     client.subscribe(topico)
 
 def on_message(client, userdata, msg):
@@ -20,6 +22,8 @@ def on_message(client, userdata, msg):
 
 def on_disconnect(client, userdata, rc):
     client.loop_stop(force=False)
+    mqtt = Broker.objects.all().filter(id=pk).first().Mqtt
+    mqtt.RC = rc
     if rc != 0:
         print("Unexpected disconnection.")
     else:
