@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib import messages
+from solo.models import SingletonModel
 
 Qos = [
     (0, 'QoS - 0'),
     (1, 'QoS - 1'),
     (2, 'QoS - 2')
 ]
-class Broker(models.Model):
+class Broker(SingletonModel):
     ESTADO_BROKER = (
         (0, 'Desligado'),
         (1, 'Iniciando'),
@@ -41,6 +43,21 @@ class Mqtt(models.Model):
     RC = models.IntegerField(choices=RC, default=0)
     def __str__(self):
         return self.topico
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(Mqtt, self).save()
+        self.reinicia_broker()
+
+    def delete(self, using=None, keep_parents=False):
+        super(Mqtt, self).delete()
+        self.reinicia_broker()
+
+    def reinicia_broker(self):
+        self.broker.estado = 4
+        self.broker.save()
+        import mqtt.tasks as task
+        task.restart.delay()
 
 
 class Dado(models.Model):

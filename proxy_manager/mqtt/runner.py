@@ -3,7 +3,7 @@ from mqtt.models import Dado, Mqtt, Broker
 topico =0
 pk = 0
 def on_connect(client, userdata, flags, rc):
-    mqtt = Broker.objects.all().filter(id=pk).first().Mqtt
+    mqtt = Mqtt.objects.all().filter(broker_id=pk).first()
     mqtt.RC = rc
     client.subscribe(topico)
 
@@ -16,13 +16,13 @@ def on_message(client, userdata, msg):
     else:
         mqtt = Mqtt.objects.all().filter(topico=msg.topic).first()
         if(mqtt != None):
-            dado = Dado(mqtt=mqtt, dado=str(msg.payload))
+            dado = Dado(mqtt=mqtt, dado=str(msg.payload.decode('UTF-8')))
             dado.save()
         print(msg.topic+" -  "+str(msg.payload))
 
 def on_disconnect(client, userdata, rc):
     client.loop_stop(force=False)
-    mqtt = Broker.objects.all().filter(id=pk).first().Mqtt
+    mqtt = Mqtt.objects.all().filter(broker_id=pk).first()
     mqtt.RC = rc
     if rc != 0:
         print("Unexpected disconnection.")
@@ -39,7 +39,7 @@ def start():
         print(broker.endereco)
         # Conecta no MQTT Broker, no meu caso, o Mosquitto
         try:
-            client.connect(broker.endereco, int(broker.porta), 60)
+            client.connect(broker.endereco, int(broker.porta), keepalive=10)
             print("Iniciei")
             broker.estado=2 #rodando
             broker.save()
