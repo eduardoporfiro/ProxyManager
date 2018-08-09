@@ -21,7 +21,6 @@ class Broker(SingletonModel):
     porta = models.IntegerField(default=1883)
     user = models.CharField(max_length=200, blank=True)
     password = models.CharField(max_length=200, blank=True)
-    status = models.BooleanField(default=False)
     estado = models.IntegerField(choices=ESTADO_BROKER, default=0)
 
     def __str__(self):
@@ -61,9 +60,9 @@ class Mqtt(models.Model):
 
 
 class Dado(models.Model):
-    mqtt = models.ForeignKey(Mqtt, on_delete=models.CASCADE)
+    mqtt = models.ForeignKey(Mqtt, on_delete=models.CASCADE, editable=False)
     QoS = models.IntegerField(default=0, choices=Qos, editable=False)
-    dado = models.CharField(max_length=200)
-    date = models.DateTimeField(default=timezone.now)
+    dado = models.CharField(max_length=200, editable=False)
+    date = models.DateTimeField(default=timezone.now, editable=False)
     def __str__(self):
         return self.mqtt.topico + " - " + self.dado
