@@ -3,6 +3,8 @@ from core.models import *
 class Broker(AbstractBroker):
     def __str__(self):
         return self.endereco
+    def save(self, *args, **kwargs):
+        super(Broker, self).save()
 
 
 class Mqtt(AbstractMqtt):

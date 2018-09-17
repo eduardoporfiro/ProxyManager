@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from mqtt.serializers import BrokerSerializer, DadoSerializer, MqttSerializer
 
 class BrokerViewSet(viewsets.ModelViewSet):
-    queryset = Broker.objects.all()
+    queryset = Broker.objects.filter(pk=1).all()
     serializer_class = BrokerSerializer
 
 class DadoViewSet(viewsets.ModelViewSet):

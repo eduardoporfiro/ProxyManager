@@ -33,7 +33,7 @@ class AbstractMqtt(models.Model):
         (4, 'Conexão Recusada, Usuário ou Senha inválido'),
         (5, 'Conexão Recusada, conexão não autorizada'),
     ]
-    topico = models.CharField(max_length=250)
+    topico = models.CharField(max_length=250, unique=True)
     QoS = models.IntegerField(choices=Qos, default=0)
     RC = models.IntegerField(choices=RC, default=0)
     class Meta:

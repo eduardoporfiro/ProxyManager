@@ -1,15 +1,15 @@
 import paho.mqtt.client as mqtt
 from mqtt.models import Dado, Mqtt, Broker
 topico =0
-pk = 0
+
 def on_connect(client, userdata, flags, rc):
-    mqtt = Mqtt.objects.all().filter(broker_id=pk).first()
+    mqtt = Mqtt.objects.all().filter(broker_id=1).first()
     mqtt.RC = rc
     client.subscribe(topico)
 
 def on_message(client, userdata, msg):
     if(msg.topic == 'proxy/parar'):
-        broker = Broker.objects.all().filter(id=pk).first()
+        broker = Broker.objects.get(pk=1)
         print('parando')
         broker.estado = 5
         broker.save()
@@ -22,7 +22,7 @@ def on_message(client, userdata, msg):
 
 def on_disconnect(client, userdata, rc):
     client.loop_stop(force=False)
-    mqtt = Mqtt.objects.all().filter(broker_id=pk).first()
+    mqtt = Mqtt.objects.all().filter(broker_id=1).first()
     mqtt.RC = rc
     if rc != 0:
         print("Unexpected disconnection.")
@@ -31,7 +31,7 @@ def on_disconnect(client, userdata, rc):
 
 def start():
     client = mqtt.Client()
-    broker = Broker.objects.all().filter(pk=pk).first()
+    broker = Broker.objects.get(pk=1)
     if (broker != None):
         client.on_connect = on_connect
         client.on_message = on_message
