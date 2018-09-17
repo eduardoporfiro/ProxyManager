@@ -1,3 +1,5 @@
+from builtins import super
+
 from django.db import models
 from django.utils import timezone
 from django.contrib import messages
@@ -26,6 +28,16 @@ class Broker(SingletonModel):
     def __str__(self):
         return self.endereco
 
+    def save(self, *args, **kwargs):
+        super(Broker, self).save()
+        #self.reinicia_broker()
+
+    def reinicia_broker(self):
+        self.estado = 4
+        import mqtt.tasks as task
+        task.restart.delay()
+
+
 
 class Mqtt(models.Model):
     RC = [
@@ -37,7 +49,7 @@ class Mqtt(models.Model):
         (5, 'Conexão Recusada, conexão não autorizada'),
     ]
     broker = models.ForeignKey(Broker, on_delete=True)
-    topico = models.CharField(max_length=250)
+    topico = models.CharField(max_length=250, unique=True)
     QoS = models.IntegerField(choices=Qos, default=0)
     RC = models.IntegerField(choices=RC, default=0)
     def __str__(self):

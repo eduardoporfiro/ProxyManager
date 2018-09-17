@@ -1,20 +1,19 @@
 import paho.mqtt.client as mqtt
 from mqtt.models import Dado, Mqtt, Broker
 topico =0
-pk = 0
 def on_connect(client, userdata, flags, rc):
-    mqtt = Mqtt.objects.all().filter(broker_id=pk).first()
+    mqtt = Mqtt.objects.all().filter(broker_id=1).first()
     mqtt.RC = rc
     client.subscribe(topico)
 
 def on_message(client, userdata, msg):
     if(msg.topic == 'proxy/parar'):
-        broker = Broker.objects.all().filter(id=pk).first()
+        broker = Broker.objects.all().first()
         print('parando')
         broker.estado = 5
         broker.save()
     else:
-        mqtt = Mqtt.objects.all().filter(topico=msg.topic).first()
+        mqtt = Mqtt.objects.get(topico=msg.topic)
         if(mqtt != None):
             dado = Dado(mqtt=mqtt, dado=str(msg.payload.decode('UTF-8')))
             dado.save()
@@ -22,7 +21,7 @@ def on_message(client, userdata, msg):
 
 def on_disconnect(client, userdata, rc):
     client.loop_stop(force=False)
-    mqtt = Mqtt.objects.all().filter(broker_id=pk).first()
+    mqtt = Mqtt.objects.all().filter(broker_id=1).first()
     mqtt.RC = rc
     if rc != 0:
         print("Unexpected disconnection.")
@@ -31,12 +30,11 @@ def on_disconnect(client, userdata, rc):
 
 def start():
     client = mqtt.Client()
-    broker = Broker.objects.all().filter(pk=pk).first()
+    broker = Broker.objects.get(pk=1)
     if (broker != None):
         client.on_connect = on_connect
         client.on_message = on_message
         client.on_disconnect = on_disconnect
-        print(broker.endereco)
         # Conecta no MQTT Broker, no meu caso, o Mosquitto
         try:
             client.connect(broker.endereco, int(broker.porta), keepalive=10)
@@ -44,7 +42,6 @@ def start():
             broker.estado=2 #rodando
             broker.save()
         except:
-            print("erro")
             broker.estado = 4 #não conectado
             broker.save()
             return
