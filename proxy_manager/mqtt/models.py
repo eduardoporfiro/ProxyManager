@@ -4,6 +4,7 @@ class Broker(AbstractBroker):
     def __str__(self):
         return self.endereco
     def save(self, *args, **kwargs):
+        self.estado=0
         super(Broker, self).save()
 
 
