@@ -1,32 +1,10 @@
-from builtins import super
-
-from django.db import models
-from django.utils import timezone
-from django.contrib import messages
-from solo.models import SingletonModel
-
-Qos = [
-    (0, 'QoS - 0'),
-    (1, 'QoS - 1'),
-    (2, 'QoS - 2')
-]
-class Broker(SingletonModel):
-    ESTADO_BROKER = (
-        (0, 'Desligado'),
-        (1, 'Iniciando'),
-        (2, 'Rodando'),
-        (3,'Com Problemas'),
-        (4, 'Não Conectado'),
-        (5, 'Parando')
-    )
-    endereco = models.CharField(max_length=200)
-    porta = models.IntegerField(default=1883)
-    user = models.CharField(max_length=200, blank=True)
-    password = models.CharField(max_length=200, blank=True)
-    estado = models.IntegerField(choices=ESTADO_BROKER, default=0)
-
+from core.models import *
+class Broker(AbstractBroker):
     def __str__(self):
         return self.endereco
+    def save(self, *args, **kwargs):
+        self.estado=0
+        super(Broker, self).save()
 
     def save(self, *args, **kwargs):
         super(Broker, self).save()
@@ -39,19 +17,8 @@ class Broker(SingletonModel):
 
 
 
-class Mqtt(models.Model):
-    RC = [
-        (0,'Conexão Aceita'),
-        (1,'Conexão Recusada, Versão de Protocolo não aceita'),
-        (2,'Conexão Recusada, identificador recusado'),
-        (3, 'Conexão Recusada, servidor indisponível'),
-        (4, 'Conexão Recusada, Usuário ou Senha inválido'),
-        (5, 'Conexão Recusada, conexão não autorizada'),
-    ]
+class Mqtt(AbstractMqtt):
     broker = models.ForeignKey(Broker, on_delete=True)
-    topico = models.CharField(max_length=250, unique=True)
-    QoS = models.IntegerField(choices=Qos, default=0)
-    RC = models.IntegerField(choices=RC, default=0)
     def __str__(self):
         return self.topico
 
@@ -70,11 +37,5 @@ class Mqtt(models.Model):
         import mqtt.tasks as task
         task.restart.delay()
 
-
-class Dado(models.Model):
+class Dado(AbstractDado):
     mqtt = models.ForeignKey(Mqtt, on_delete=models.CASCADE, editable=False)
-    QoS = models.IntegerField(default=0, choices=Qos, editable=False)
-    dado = models.CharField(max_length=200, editable=False)
-    date = models.DateTimeField(default=timezone.now, editable=False)
-    def __str__(self):
-        return self.mqtt.topico + " - " + self.dado

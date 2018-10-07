@@ -24,8 +24,9 @@ SECRET_KEY = '6%e4d76^ml_6vip89pfu(@@)vpb4r7&+xxpql90m0+2y&d+($2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['localhost','192.168.0.100','eduardoporfiro.ddns.net','192.168.1.200']
+from socket import gethostname, gethostbyname
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ]
+ALLOWED_HOSTS = ['localhost','192.168.0.100','proxymanager.ddns.net','192.168.1.200']
 
 
 # Application definition
@@ -38,9 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'core',
     'mqtt',
     'solo',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':(
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

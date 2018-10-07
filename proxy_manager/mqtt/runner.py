@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 from mqtt.models import Dado, Mqtt, Broker
 topico =0
+
 def on_connect(client, userdata, flags, rc):
     mqtt = Mqtt.objects.all().filter(broker_id=1).first()
     mqtt.RC = rc
@@ -8,7 +9,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     if(msg.topic == 'proxy/parar'):
-        broker = Broker.objects.all().first()
+        broker = Broker.objects.get(pk=1)
         print('parando')
         broker.estado = 5
         broker.save()

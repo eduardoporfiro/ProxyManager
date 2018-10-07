@@ -14,4 +14,6 @@ class DadoSerializer(serializers.ModelSerializer):
 class MqttSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mqtt
-        fields = '__all__'
+        exclude =[
+            'RC',
+        ]

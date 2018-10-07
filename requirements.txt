@@ -21,5 +21,3 @@ pycodestyle==2.4.0
 pylint==1.9.1
 pytz==2018.4
 six==1.11.0
-vine==1.1.4
-wrapt==1.10.11
