@@ -14,7 +14,7 @@ def on_message(client, userdata, msg):
         broker.estado = 5
         broker.save()
     else:
-        mqtt = Mqtt.objects.all().filter(topico=msg.topic).first()
+        mqtt = Mqtt.objects.get(topico=msg.topic)
         if(mqtt != None):
             dado = Dado(mqtt=mqtt, dado=str(msg.payload.decode('UTF-8')))
             dado.save()
@@ -36,7 +36,6 @@ def start():
         client.on_connect = on_connect
         client.on_message = on_message
         client.on_disconnect = on_disconnect
-        print(broker.endereco)
         # Conecta no MQTT Broker, no meu caso, o Mosquitto
         try:
             client.connect(broker.endereco, int(broker.porta), keepalive=10)
@@ -44,7 +43,6 @@ def start():
             broker.estado=2 #rodando
             broker.save()
         except:
-            print("erro")
             broker.estado = 4 #não conectado
             broker.save()
             return

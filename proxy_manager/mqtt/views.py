@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from mqtt.models import Broker, Dado, Mqtt
 from rest_framework import generics, mixins
 from mqtt.serializers import BrokerSerializer, DadoSerializer, MqttSerializer

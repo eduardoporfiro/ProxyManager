@@ -23,7 +23,6 @@ def iniciar(broker):
     for mqtts in Mqtt.objects.all().filter(broker=broker):
         topicos.append((mqtts.topico, mqtts.QoS))
     conect.topico = topicos
-    conect.pk = broker.pk
     broker.estado = 1  # iniciando
     broker.save()
     conect.start()
