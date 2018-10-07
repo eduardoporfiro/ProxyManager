@@ -19,5 +19,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('mqtt.urls')),
+    path('', include('core.urls'))
 ]
 urlpatterns += staticfiles_urlpatterns()
