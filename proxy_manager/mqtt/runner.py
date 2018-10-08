@@ -1,10 +1,9 @@
 import paho.mqtt.client as mqtt
-from mqtt.models import Dado, Mqtt, Broker
+from mqtt.models import Dado, Mqtt, Broker, Dispositivo
 topico =0
 
 def on_connect(client, userdata, flags, rc):
     mqtt = Mqtt.objects.all().filter(broker_id=1).first()
-    mqtt.RC = rc
     client.subscribe(topico)
 
 def on_message(client, userdata, msg):
@@ -16,7 +15,10 @@ def on_message(client, userdata, msg):
     else:
         mqtt = Mqtt.objects.get(topico=msg.topic)
         if(mqtt != None):
-            dado = Dado(mqtt=mqtt, dado=str(msg.payload.decode('UTF-8')))
+            if(mqtt.dispositivo.is_int):
+                dado = Dado(sensor=mqtt.dispositivo,  valor_int=int(msg.payload.decode('UTF-8')))
+            else:
+                dado = Dado(sensor=mqtt.dispositivo, valor_char=str(msg.payload.decode('UTF-8')))
             dado.save()
         print(msg.topic+" -  "+str(msg.payload))
 

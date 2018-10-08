@@ -10,6 +10,9 @@ urlpatterns = [
     path('mqtt/', views.MqttList.as_view(), name='mqtt_list'),
     path('<int:id>/mqttUpdate/', views.MqttUpdateDelete.as_view(), name='mqtt_update'),
 
+    path('dispositivo/', views.DispositivoList.as_view(), name='dispositivo_list'),
+    path('<int:id>/dispositivoUpdate/', views.DispositivoUpdateDelete.as_view(), name='dispositivo_update'),
+
     path('dado/', views.DadoList.as_view(), name='dadolist'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

@@ -37,5 +37,12 @@ class Mqtt(AbstractMqtt):
         import mqtt.tasks as task
         task.restart.delay()
 
+class Dispositivo(AbstractDispositivo):
+    mqtt = models.OneToOneField(Mqtt, on_delete=models.CASCADE, related_name='dispositivo')
+    def __str__(self):
+        return self.nome
+
 class Dado(AbstractDado):
-    mqtt = models.ForeignKey(Mqtt, on_delete=models.CASCADE, editable=False)
+    sensor = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
+    def __str__(self):
+        return "Dado: "+self.sensor.nome
