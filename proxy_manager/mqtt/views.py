@@ -19,7 +19,7 @@ class DadoList(generics.ListAPIView):
     serializer_class = DadoSerializer
 
 
-class MqttList(mixins.CreateModelMixin,generics.ListAPIView):
+class MqttList(generics.ListCreateAPIView):
     queryset = Mqtt.objects.all()
     serializer_class = MqttSerializer
 
@@ -33,7 +33,7 @@ class MqttUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 
-class DispositivoList(mixins.CreateModelMixin, generics.ListAPIView):
+class DispositivoList(generics.ListCreateAPIView):
     queryset = Dispositivo.objects.all()
     serializer_class = DispositivoSerializer
 
