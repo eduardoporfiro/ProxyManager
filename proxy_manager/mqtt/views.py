@@ -22,6 +22,7 @@ class DadoList(generics.ListAPIView):
 class MqttList(generics.ListCreateAPIView):
     queryset = Mqtt.objects.all()
     serializer_class = MqttSerializer
+    filter_fields = ('topico', 'RC', 'QoS')
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -36,6 +37,7 @@ class MqttUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
 class DispositivoList(generics.ListCreateAPIView):
     queryset = Dispositivo.objects.all()
     serializer_class = DispositivoSerializer
+    filter_fields = ('nome', 'tipo', 'mqtt')
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
