@@ -22,7 +22,7 @@ class DadoList(generics.ListAPIView):
 class MqttList(generics.ListCreateAPIView):
     queryset = Mqtt.objects.all()
     serializer_class = MqttSerializer
-    filter_fields = ('topico', 'RC', 'QoS')
+    filter_fields = ('topico', 'RC', 'QoS','id')
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
