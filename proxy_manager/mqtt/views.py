@@ -27,18 +27,4 @@ class MqttUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = Mqtt.objects.all()
     serializer_class = MqttSerializer
     lookup_field = 'id'
-    
-    
-class DispositivoList(generics.ListCreateAPIView):
-    queryset = Dispositivo.objects.all()
-    serializer_class = DispositivoSerializer
-    filter_fields = ('nome', 'tipo', 'mqtt')
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class DispositivoUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Dispositivo.objects.all()
-    serializer_class = DispositivoSerializer
-    lookup_field = 'id'
