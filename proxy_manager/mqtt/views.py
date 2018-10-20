@@ -1,6 +1,6 @@
-from mqtt.models import Broker, Dado, Mqtt, Dispositivo, Dado
+from mqtt.models import Broker,  Mqtt
 from rest_framework import generics, mixins
-from mqtt.serializers import BrokerSerializer, MqttSerializer, DispositivoSerializer, DadoSerializer
+from mqtt.serializers import BrokerSerializer, MqttSerializer
 
 
 class BrokerUpdate (generics.UpdateAPIView):
@@ -12,11 +12,6 @@ class BrokerUpdate (generics.UpdateAPIView):
 class BrokerList(generics.ListAPIView):
     queryset = Broker.objects.all()
     serializer_class = BrokerSerializer
-
-
-class DadoList(generics.ListAPIView):
-    queryset = Dado.objects.all()
-    serializer_class = DadoSerializer
 
 
 class MqttList(generics.ListCreateAPIView):
@@ -32,8 +27,8 @@ class MqttUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = Mqtt.objects.all()
     serializer_class = MqttSerializer
     lookup_field = 'id'
-
-
+    
+    
 class DispositivoList(generics.ListCreateAPIView):
     queryset = Dispositivo.objects.all()
     serializer_class = DispositivoSerializer
