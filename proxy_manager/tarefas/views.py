@@ -96,3 +96,14 @@ class JobUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     lookup_field = 'id'
+
+
+class If_sensor_booleanList(generics.ListCreateAPIView):
+    queryset = If_sensor_boolean.objects.all()
+    serializer_class = If_sensor_booleanSerializer
+
+
+class If_sensor_booleanUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = If_sensor_boolean.objects.all()
+    serializer_class = If_sensor_booleanSerializer
+    lookup_field = 'id'

@@ -28,6 +28,10 @@ urlpatterns = [
     path('<int:id>/if_sensor_dadosensor/', views.If_sensor_dadosensorUpdateDelete.as_view(),
          name='if_sensor_dadosensor_update'),
 
+    path('if_sensor_boolean/', views.If_sensor_booleanList.as_view(), name='if_sensor_boolean'),
+    path('<int:id>/if_sensor_boolean/', views.If_sensor_booleanUpdateDelete.as_view(),
+         name='if_sensor_boolean_update'),
+
     path('job/', views.JobList.as_view(), name='job'),
     path('<int:id>/job/', views.JobUpdateDelete.as_view(),
          name='job_update'),

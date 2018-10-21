@@ -113,3 +113,12 @@ class If_sensor_dadosensor(Task):
     ]
     condicao = models.IntegerField(choices=Condicao)
     valor = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='If_sensor_dadosensor')
+
+
+class If_sensor_boolean(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.NullBooleanField()
