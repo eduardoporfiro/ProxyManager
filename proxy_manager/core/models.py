@@ -78,7 +78,6 @@ class Task(models.Model):
                                       related_name='anterior', null=True)
     task_sucessor = models.ForeignKey('self', on_delete=models.CASCADE,
                                       related_name='sucessor', null=True)
-    json = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
