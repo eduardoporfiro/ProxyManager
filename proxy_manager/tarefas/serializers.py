@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from tarefas.models import Dispositivo, Dado
-from core.models import Task,Atuador_troca_estado, Atuador_boolean,\
-    If_sensor_string,If_sensor_numero, If_sensor_dadosensor
+from tarefas.models import Dispositivo, Dado, Atuador_troca_estado, Atuador_boolean, Job
+from core.models import Task, If_sensor_string,If_sensor_numero, If_sensor_dadosensor
 
 
 class DispositivoSerializer(serializers.ModelSerializer):
@@ -49,4 +48,9 @@ class If_sensor_numeroSerializer(serializers.ModelSerializer):
 class If_sensor_dadosensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = If_sensor_dadosensor
+        fields = '__all__'
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
         fields = '__all__'

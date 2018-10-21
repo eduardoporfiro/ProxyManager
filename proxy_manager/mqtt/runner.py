@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
-from mqtt.models import Dado, Mqtt, Broker, Dispositivo
+from mqtt.models import Mqtt, Broker
+from tarefas.models import Dado, Dispositivo
 topico =0
 
 def on_connect(client, userdata, flags, rc):

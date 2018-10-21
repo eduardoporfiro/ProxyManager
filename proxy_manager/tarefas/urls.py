@@ -28,5 +28,9 @@ urlpatterns = [
     path('<int:id>/if_sensor_dadosensor/', views.If_sensor_dadosensorUpdateDelete.as_view(),
          name='if_sensor_dadosensor_update'),
 
+    path('job/', views.JobList.as_view(), name='job'),
+    path('<int:id>/job/', views.JobUpdateDelete.as_view(),
+         name='job_update'),
+
     path('dado/', views.DadoList.as_view(), name='dadolist'),
 ]

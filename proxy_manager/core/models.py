@@ -7,6 +7,7 @@ Qos = [
     (2, 'QoS - 2')
 ]
 
+
 class AbstractBroker(models.Model):
     ESTADO_BROKER = (
         (0, 'Desligado'),
@@ -24,6 +25,7 @@ class AbstractBroker(models.Model):
     class Meta:
         abstract=True
 
+
 class AbstractMqtt(models.Model):
     RC = [
         (0,'Conexão Aceita'),
@@ -39,6 +41,7 @@ class AbstractMqtt(models.Model):
     class Meta:
         abstract = True
 
+
 class AbstractDispositivo(models.Model):
     TIPO = (
         (0, 'Atuador'),
@@ -50,6 +53,7 @@ class AbstractDispositivo(models.Model):
     class Meta:
         abstract=True
 
+
 class AbstractDado(models.Model):
     QoS = models.IntegerField(default=0, choices=Qos, editable=False)
     valor_char = models.CharField(max_length=500, blank=True)
@@ -58,12 +62,14 @@ class AbstractDado(models.Model):
     class Meta:
         abstract=True
 
+
 class Celery(models.Model):
     app = models.CharField(max_length=200)
     desc = models.CharField(max_length=200)
     exception = models.CharField(max_length=200)
     task = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+
 
 class Task(models.Model):
     comando = models.CharField(max_length=200)
@@ -75,13 +81,6 @@ class Task(models.Model):
     json = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-class Atuador_troca_estado(Task):
-    estado_anterior = models.NullBooleanField()
-    estado_atual = models.NullBooleanField()
-
-class Atuador_boolean(Task):
-    estado_anterior = models.NullBooleanField()
-    estado_atual = models.NullBooleanField()
 
 class If_sensor_string(Task):
     Condicao = [
@@ -90,6 +89,7 @@ class If_sensor_string(Task):
     ]
     condicao = models.IntegerField(choices=Condicao)
     valor = models.CharField(max_length=200)
+
 
 class If_sensor_numero(Task):
     Condicao = [
