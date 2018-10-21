@@ -36,5 +36,6 @@ urlpatterns = [
     path('<int:id>/job/', views.JobUpdateDelete.as_view(),
          name='job_update'),
 
+
     path('dado/', views.DadoList.as_view(), name='dadolist'),
 ]
