@@ -13,7 +13,7 @@ urlpatterns = [
          name='atuador_troca_estado_update'),
 
     path('atuador_boolean/', views.Atuador_booleanList.as_view(), name='atuador_boolean'),
-    path('<int:id>/atuador_booleanUpdate/', views.Atuador_troca_estadoUpdateDelete.as_view(),
+    path('<int:id>/atuador_booleanUpdate/', views.Atuador_booleanUpdateDelete.as_view(),
          name='atuador_boolean_update'),
 
     path('if_sensor_numero/', views.If_sensor_numeroList.as_view(), name='if_sensor_numero'),
