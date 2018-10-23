@@ -8,7 +8,7 @@ urlpatterns = [
     path('task/', views.TaskList.as_view(), name='task_list'),
     path('<int:id>/taskUpdate/', views.TaskUpdateDelete.as_view(), name='task_update'),
 
-    path('atuador_troca_estado/', views.Atuador_booleanList.as_view(), name='atuador_troca_estado'),
+    path('atuador_troca_estado/', views.Atuador_troca_estadoList.as_view(), name='atuador_troca_estado'),
     path('<int:id>/atuador_troca_estadoUpdate/', views.Atuador_troca_estadoUpdateDelete.as_view(),
          name='atuador_troca_estado_update'),
 
