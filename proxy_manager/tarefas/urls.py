@@ -17,19 +17,19 @@ urlpatterns = [
          name='atuador_boolean_update'),
 
     path('if_sensor_numero/', views.If_sensor_numeroList.as_view(), name='if_sensor_numero'),
-    path('<int:id>/if_sensor_numero/', views.If_sensor_numeroUpdateDelete.as_view(),
+    path('<int:id>/if_sensor_numeroUpdate/', views.If_sensor_numeroUpdateDelete.as_view(),
          name='if_sensor_numero_update'),
 
     path('if_sensor_string/', views.If_sensor_stringList.as_view(), name='if_sensor_string'),
-    path('<int:id>/if_sensor_string/', views.If_sensor_stringUpdateDelete.as_view(),
+    path('<int:id>/if_sensor_stringUpdate/', views.If_sensor_stringUpdateDelete.as_view(),
          name='if_sensor_string_update'),
 
     path('if_sensor_dadosensor/', views.If_sensor_dadosensorList.as_view(), name='if_sensor_dadosensor'),
-    path('<int:id>/if_sensor_dadosensor/', views.If_sensor_dadosensorUpdateDelete.as_view(),
+    path('<int:id>/if_sensor_dadosensorUpdate/', views.If_sensor_dadosensorUpdateDelete.as_view(),
          name='if_sensor_dadosensor_update'),
 
     path('if_sensor_boolean/', views.If_sensor_booleanList.as_view(), name='if_sensor_boolean'),
-    path('<int:id>/if_sensor_boolean/', views.If_sensor_booleanUpdateDelete.as_view(),
+    path('<int:id>/if_sensor_booleanUpdate/', views.If_sensor_booleanUpdateDelete.as_view(),
          name='if_sensor_boolean_update'),
 
     path('job/', views.JobList.as_view(), name='job'),
