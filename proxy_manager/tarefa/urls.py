@@ -1,5 +1,5 @@
 from django.urls import path
-from tarefas import views
+from tarefa import views
 
 urlpatterns = [
     path('dispositivo/', views.DispositivoList.as_view(), name='dispositivo_list'),

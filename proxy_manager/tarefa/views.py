@@ -1,6 +1,6 @@
 from rest_framework import generics, mixins
-from tarefas.models import Dispositivo, Dado
-from tarefas.serializers import *
+from tarefa.models import Dispositivo, Dado
+from tarefa.serializers import *
 
 class DispositivoList(generics.ListCreateAPIView):
     queryset = Dispositivo.objects.all()

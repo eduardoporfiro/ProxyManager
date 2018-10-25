@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from tarefas.models import Dispositivo, Dado, Atuador_troca_estado, Atuador_boolean, Job
-from core.models import Task, If_sensor_string,If_sensor_numero, If_sensor_dadosensor, If_sensor_boolean
-
+from tarefa.models import *
 
 class DispositivoSerializer(serializers.ModelSerializer):
     class Meta:
