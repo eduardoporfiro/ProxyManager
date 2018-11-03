@@ -5,14 +5,17 @@ from mqtt.models import Mqtt
 
 class Dispositivo(AbstractDispositivo):
     mqtt = models.OneToOneField(Mqtt, on_delete=models.CASCADE, related_name='dispositivo')
+
     def __str__(self):
         return self.nome
 
 
 class Dado(AbstractDado):
     sensor = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
+
     def __str__(self):
         return "Dado: "+self.sensor.nome
+
 
 class Task(models.Model):
     Tipos = [
@@ -60,52 +63,41 @@ class Task(models.Model):
         elif self.tipo == 2:
             return payload
         elif self.tipo == 3:
-            return payload
-
-
-
-
-class If_sensor_string(Task):
-    Condicao = [
-        (0,'='),
-        (1,'!=')
-    ]
-    condicao = models.IntegerField(choices=Condicao)
-    valor = models.CharField(max_length=200)
-
-
-class If_sensor_numero(Task):
-    Condicao = [
-        (0, '='),
-        (1, '!='),
-        (2,'>'),
-        (3,'>='),
-        (4,'<'),
-        (5,'<=')
-    ]
-    condicao = models.IntegerField(choices=Condicao)
-    valor = models.IntegerField()
-
-class If_sensor_dadosensor(Task):
-    Condicao = [
-        (0, '='),
-        (1, '!='),
-        (2, '>'),
-        (3, '>='),
-        (4, '<'),
-        (5, '<=')
-    ]
-    condicao = models.IntegerField(choices=Condicao)
-    valor = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='If_sensor_dadosensor')
-
-
-class If_sensor_boolean(Task):
-    Condicao = [
-        (0, '='),
-        (1, '!=')
-    ]
-    condicao = models.IntegerField(choices=Condicao)
-    valor = models.NullBooleanField()
+            dispo = Dispositivo.objects.get(pk=dipo_pk)
+            if dispo.is_int:
+                avg = Dado.objects.filter(sensor=dispo).aggregate(models.Avg('valor_int'))
+                return avg['valor_int__avg']
+            else:
+                avg = Dado.objects.filter(sensor=dispo).aggregate(models.Avg('valor_char'))
+                return avg['valor_char__avg']
+        elif self.tipo == 4:
+            dispo = Dispositivo.objects.get(pk=dipo_pk)
+            if dispo.is_int:
+                min = Dado.objects.filter(sensor=dispo).aggregate(models.Min('valor_int'))
+                return min['valor_int__min']
+            else:
+                min = Dado.objects.filter(sensor=dispo).aggregate(models.Min('valor_char'))
+                return min['valor_char__min']
+        elif self.tipo == 5:
+            dispo = Dispositivo.objects.get(pk=dipo_pk)
+            if dispo.is_int:
+                max = Dado.objects.filter(sensor=dispo).aggregate(models.Max('valor_int'))
+                return max['valor_int__max']
+            else:
+                max = Dado.objects.filter(sensor=dispo).aggregate(models.Max('valor_char'))
+                return max['valor_char__max']
+        elif self.tipo == 6:
+            If_sensor_string.objects.filter(pk=self.pk).get().start(payload, dipo_pk)
+        elif self.tipo == 7:
+            If_sensor_numero.objects.filter(pk=self.pk).get().start(payload, dipo_pk)
+        elif self.tipo == 8:
+            If_sensor_boolean.objects.filter(pk=self.pk).get().start(payload, dipo_pk)
+        elif self.tipo == 9:
+            If_sensor_dadosensor.objects.filter(pk=self.pk).get().start(payload, dipo_pk)
+        elif self.tipo == 10:
+            Atuador_troca_estado.objects.filter(pk=self.pk).get().start(payload, dipo_pk)
+        elif self.tipo == 11:
+            Atuador_boolean.objects.filter(pk=self.pk).get().start(payload, dipo_pk)
 
 
 class Job(models.Model):
@@ -122,12 +114,169 @@ class Job(models.Model):
         return 'Job: '+self.dispositivo.nome
 
 
+class If_sensor_string(Task):
+    Condicao = [
+        (0,'='),
+        (1,'!=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.CharField(max_length=200)
+
+    def start(self, payload, dipo_pk):
+        if self.task_sucessor != None:
+            if self.condicao == 0:
+                if payload == self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+            else:
+                if payload != self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+
+
+class If_sensor_numero(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!='),
+        (2,'>'),
+        (3,'>='),
+        (4,'<'),
+        (5,'<=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.IntegerField()
+
+    def start(self, payload, dipo_pk):
+        print('NUMERO:TRUE')
+        if self.task_sucessor != None:
+            print('NUMERO:TRUE')
+            if self.condicao == 0:
+                if self.valor == int(payload):
+                    print('NUMERO:TRUE')
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 1:
+                if self.valor != int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 2:
+                if self.valor > int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 3:
+                if self.valor >= int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 4:
+                if self.valor < int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 5:
+                if self.valor <= int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+
+class If_sensor_dadosensor(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!='),
+        (2, '>'),
+        (3, '>='),
+        (4, '<'),
+        (5, '<=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='If_sensor_dadosensor')
+    def start(self, payload, dipo_pk):
+        if self.valor != None and self.task_sucessor != None:
+            if self.condicao == 0:
+                if payload == self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 1:
+                if payload != self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 2:
+                if payload > self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 3:
+                if payload >= self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 4:
+                if payload < self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 5:
+                if payload <= self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+
+
+class If_sensor_boolean(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.NullBooleanField()
+
+    def start(self, payload, dipo_pk):
+        if self.task_sucessor != None:
+            if self.condicao == 0:
+                if bool(payload) == self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+            else:
+                if bool(payload) != self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+
+
 class Atuador_troca_estado(Task):
-    estado_anterior = models.NullBooleanField()
-    estado_atual = models.NullBooleanField()
+    estado_anterior = models.NullBooleanField(default=True)
+    estado_atual = models.NullBooleanField(default=False)
     atuador = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
+
+    def start(self, payload, dipo_pk):
+        if self.atuador != None:
+            self.envia_mqtt(self.atuador.mqtt.topico, self.estado_anterior)
+            atual = self.estado_atual
+            self.estado_atual = self.estado_anterior
+            self.estado_anterior = atual
+            self.save()
+
+        if self.task_sucessor != None:
+            self.task_sucessor.start(payload, dipo_pk)
+
+    def envia_mqtt(self, topico, valor):
+        import paho.mqtt.publish as publish
+        if self.atuador.mqtt.broker.username != '':
+            publish.single(topico, valor,
+                           hostname=self.atuador.mqtt.broker.endereco,
+                           port=int(self.atuador.mqtt.broker.porta),
+                           auth= {'username': self.atuador.mqtt.broker.username, 'password': self.atuador.mqtt.broker.password})
+        else:
+            publish.single(topico, valor,
+                           hostname=self.atuador.mqtt.broker.endereco,
+                           port=int(self.atuador.mqtt.broker.porta))
 
 
 class Atuador_boolean(Task):
-    estado = models.NullBooleanField()
+    estado = models.NullBooleanField(default=False)
     atuador = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
+
+    def start(self, payload, dipo_pk):
+        if self.atuador != None and self.estado != None:
+            self.envia_mqtt(self.atuador.mqtt.topico, self.estado)
+        if self.task_sucessor != None:
+            self.task_sucessor.start(payload, dipo_pk)
+
+    def envia_mqtt(self, topico, valor):
+        import paho.mqtt.publish as publish
+        if self.atuador.mqtt.broker.username != '':
+            publish.single(topico, valor,
+                           hostname=self.atuador.mqtt.broker.endereco,
+                           port=int(self.atuador.mqtt.broker.porta),
+                           auth={'username': self.atuador.mqtt.broker.username, 'password': self.atuador.mqtt.broker.password})
+        else:
+            publish.single(topico, valor,
+                           hostname=self.atuador.mqtt.broker.endereco,
+                           port=int(self.atuador.mqtt.broker.porta))

@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from proxy_manager.celery import app
 from mqtt.models import Broker, Mqtt
-from tarefa.models import Task
+from tarefa.models import *
 from celery.utils.log import get_task_logger
 
 import paho.mqtt.client as mqtt
@@ -39,6 +39,7 @@ def iniciar(broker):
 @app.task
 def start_task(task_pk, payload, dispo_pk):
     task = Task.objects.get(pk=task_pk)
+    print(payload)
     task.start(payload, dispo_pk)
 
 
@@ -58,11 +59,11 @@ def on_message(client, userdata, msg):
             mqtt = Mqtt.objects.filter(topico=msg.topic).get()
             try:
                 dispo = mqtt.dispositivo
-                if dispo != None:
-                    start_task.delay(dispo.job.firs_task.pk, str(msg.payload), dispo.pk)
+                if dispo != None and dispo.tipo == 1:
+                    start_task.delay(dispo.job.firs_task.pk, str(msg.payload.decode('UTF-8')), dispo.pk)
             except Exception as e:
                 print(e)
-        print(msg.topic+" -  "+str(msg.payload))
+        print(msg.topic+" -  "+str(msg.payload.decode('UTF-8')))
 
 
 def on_disconnect(client, userdata, rc):
