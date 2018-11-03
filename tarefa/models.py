@@ -37,8 +37,32 @@ class Task(models.Model):
     task_sucessor = models.ForeignKey('self', on_delete=models.CASCADE,
                                       related_name='sucessor', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.comando
+
+    def start(self, payload, dipo_pk):
+        if self.tipo == 0:
+            dispo = Dispositivo.objects.get(pk=dipo_pk)
+            if dispo.is_int:
+                dado = Dado(sensor=dispo,
+                            valor_int=int(payload))
+                dado.save()
+            else:
+                dado = Dado(sensor=dispo,
+                            valor_char=payload)
+                dado.save()
+        elif self.tipo == 1:
+            try:
+                return int(payload)
+            except:
+                return 0
+        elif self.tipo == 2:
+            return payload
+        elif self.tipo == 3:
+            return payload
+
+
 
 
 class If_sensor_string(Task):

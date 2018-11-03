@@ -1,4 +1,5 @@
-from core.models import *
+from core.models import AbstractBroker, AbstractMqtt
+from django.db import models
 class Broker(AbstractBroker):
     def __str__(self):
         return self.endereco
