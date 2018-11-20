@@ -158,19 +158,19 @@ class If_sensor_numero(Task):
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 2:
-                if self.valor > int(payload):
+                if int(payload) > self.valor:
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 3:
-                if self.valor >= int(payload):
+                if int(payload) >= self.valor:
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 4:
-                if self.valor < int(payload):
+                if int(payload) < self.valor:
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 5:
-                if self.valor <= int(payload):
+                if int(payload) <= self.valor:
                     self.task_sucessor.start(payload, dipo_pk)
 
 
@@ -196,19 +196,19 @@ class If_sensor_dadosensor(Task):
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 2:
-                if payload > self.valor.start(payload, dipo_pk):
+                if self.valor.start(payload, dipo_pk) > payload:
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 3:
-                if payload >= self.valor.start(payload, dipo_pk):
+                if self.valor.start(payload, dipo_pk) >= payload:
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 4:
-                if payload < self.valor.start(payload, dipo_pk):
+                if self.valor.start(payload, dipo_pk) < payload:
                     self.task_sucessor.start(payload, dipo_pk)
 
             elif self.condicao == 5:
-                if payload <= self.valor.start(payload, dipo_pk):
+                if self.valor.start(payload, dipo_pk) <= payload:
                     self.task_sucessor.start(payload, dipo_pk)
 
 
