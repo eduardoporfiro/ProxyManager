@@ -90,6 +90,7 @@ class If_sensor_dadosensorUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
 class JobList(generics.ListCreateAPIView):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
+    filter_fields = ('id',)
 
 
 class JobUpdateDelete(generics.RetrieveUpdateDestroyAPIView):

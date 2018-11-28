@@ -71,6 +71,10 @@ def on_disconnect(client, userdata, rc):
     mqtt = Mqtt.objects.all().filter(broker_id=1).first()
     mqtt.RC = rc
     if rc != 0:
+        broker = Broker.objects.get(pk=1)
+        broker.estado = 3 #com problemas
+        broker.RC = rc
+        broker.save()
         print("Unexpected disconnection.")
     else:
         print("Disconnected")
@@ -85,9 +89,16 @@ def iniciar_MQTT():
         client.on_disconnect = on_disconnect
         # Conecta no MQTT Broker, no meu caso, o Mosquitto
         try:
-            client.connect(broker.endereco, int(broker.porta), keepalive=10)
+            rc=0
+            if broker.username:
+                client.username_pw_set(broker.username, broker.password)
+                client.connect(broker.endereco, int(broker.porta), keepalive=10)
+            else:
+                rc = client.connect(broker.endereco, int(broker.porta), keepalive=10)
+
             print("Iniciei")
             broker.estado=2 #rodando
+            broker.RC=0
             broker.save()
         except:
             broker.estado = 4 #não conectado
