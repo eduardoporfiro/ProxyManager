@@ -237,6 +237,7 @@ class Atuador_troca_estado(Task):
 
     def start(self, payload, dipo_pk):
         if self.atuador != None:
+            print("Atuador Troca Estado")
             try:
                 self.envia_mqtt(self.atuador.mqtt.topico, self.estado_anterior)
                 atual = self.estado_atual
@@ -252,11 +253,13 @@ class Atuador_troca_estado(Task):
     def envia_mqtt(self, topico, valor):
         import paho.mqtt.publish as publish
         if self.atuador.mqtt.broker.username != '':
-            publish.single(topico, valor,
+            print('Com SENHA')
+            print(publish.single(topico, valor,
                            hostname=self.atuador.mqtt.broker.endereco,
                            port=int(self.atuador.mqtt.broker.porta),
-                           auth= {'username': self.atuador.mqtt.broker.username, 'password': self.atuador.mqtt.broker.password})
+                           auth= {'username': self.atuador.mqtt.broker.username, 'password': self.atuador.mqtt.broker.password}))
         else:
+            print('SEM SENHA')
             publish.single(topico, valor,
                            hostname=self.atuador.mqtt.broker.endereco,
                            port=int(self.atuador.mqtt.broker.porta))
