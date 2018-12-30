@@ -237,8 +237,8 @@ class Atuador_troca_estado(Task):
     atuador = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
 
     def start(self, payload, dipo_pk):
+        print("Atuador Troca Estado")
         if self.atuador != None:
-            print("Atuador Troca Estado")
             try:
                 self.envia_mqtt(self.atuador.mqtt.topico, self.estado_anterior)
                 atual = self.estado_atual
