@@ -56,6 +56,8 @@ class Task(models.Model):
                             valor_char=payload)
                 dado.save()
             print('Dado Salvo')
+            if self.task_sucessor:
+                self.task_sucessor.start(payload, dipo_pk)
         elif self.tipo == 1:
             try:
                 return int(payload)
