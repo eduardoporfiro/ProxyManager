@@ -237,11 +237,14 @@ class Atuador_troca_estado(Task):
 
     def start(self, payload, dipo_pk):
         if self.atuador != None:
-            self.envia_mqtt(self.atuador.mqtt.topico, self.estado_anterior)
-            atual = self.estado_atual
-            self.estado_atual = self.estado_anterior
-            self.estado_anterior = atual
-            self.save()
+            try:
+                self.envia_mqtt(self.atuador.mqtt.topico, self.estado_anterior)
+                atual = self.estado_atual
+                self.estado_atual = self.estado_anterior
+                self.estado_anterior = atual
+                self.save()
+            except Exception as e:
+                print(e)
 
         if self.task_sucessor != None:
             self.task_sucessor.start(payload, dipo_pk)
