@@ -55,6 +55,7 @@ class Task(models.Model):
                 dado = Dado(sensor=dispo,
                             valor_char=payload)
                 dado.save()
+            print('Dado Salvo')
         elif self.tipo == 1:
             try:
                 return int(payload)
