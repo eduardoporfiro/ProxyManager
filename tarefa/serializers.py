@@ -59,3 +59,27 @@ class If_sensor_booleanSerializer(serializers.ModelSerializer):
     class Meta:
         model=If_sensor_boolean
         fields='__all__'
+
+
+class If_else_sensor_stringSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=If_else_sensor_string
+        fields='__all__'
+
+
+class If_else_sensor_booleanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=If_else_sensor_boolean
+        fields='__all__'
+
+
+class If_else_sensor_dadosensorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=If_else_sensor_dadosensor
+        fields='__all__'
+
+
+class If_else_sensor_numeroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=If_else_sensor_numero
+        fields='__all__'

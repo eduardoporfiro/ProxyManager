@@ -12,3 +12,8 @@ admin.site.register(If_sensor_string)
 admin.site.register(If_sensor_dadosensor)
 admin.site.register(If_sensor_boolean)
 
+admin.site.register(If_else_sensor_boolean)
+admin.site.register(If_else_sensor_dadosensor)
+admin.site.register(If_else_sensor_numero)
+admin.site.register(If_else_sensor_string)
+

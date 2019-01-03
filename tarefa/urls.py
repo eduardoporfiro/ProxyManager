@@ -36,6 +36,21 @@ urlpatterns = [
     path('<int:id>/job/', views.JobUpdateDelete.as_view(),
          name='job_update'),
 
+    path('if_else_sensor_string/', views.If_else_sensor_stringList.as_view(), name='if_else_sensor_string'),
+    path('<int:id>/if_else_sensor_stringUpdate/', views.If_else_sensor_stringUpdateDelete.as_view(),
+         name='if_else_sensor_string_update'),
+
+    path('if_else_sensor_boolean/', views.If_else_sensor_booleanList.as_view(), name='if_else_sensor_boolean'),
+    path('<int:id>/if_else_sensor_booleanUpdate/', views.If_else_sensor_booleanUpdateDelete.as_view(),
+         name='if_else_sensor_boolean_update'),
+
+    path('if_else_sensor_dadosensor/', views.If_else_sensor_dadosensorList.as_view(), name='if_else_sensor_dadosensor'),
+    path('<int:id>/if_else_sensor_dadosensorUpdate/', views.If_else_sensor_dadosensorUpdateDelete.as_view(),
+         name='if_else_sensor_dadosensor_update'),
+
+    path('if_else_sensor_numero/', views.If_else_sensor_numeroList.as_view(), name='if_else_sensor_numero'),
+    path('<int:id>/if_else_sensor_numeroUpdate/', views.If_else_sensor_numeroUpdateDelete.as_view(),
+         name='if_else_sensor_dadosensor_update'),
 
     path('dado/', views.DadoList.as_view(), name='dadolist'),
 ]

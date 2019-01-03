@@ -2,6 +2,7 @@ from rest_framework import generics, mixins
 from tarefa.models import Dispositivo, Dado
 from tarefa.serializers import *
 
+
 class DispositivoList(generics.ListCreateAPIView):
     queryset = Dispositivo.objects.all()
     serializer_class = DispositivoSerializer
@@ -107,4 +108,48 @@ class If_sensor_booleanList(generics.ListCreateAPIView):
 class If_sensor_booleanUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = If_sensor_boolean.objects.all()
     serializer_class = If_sensor_booleanSerializer
+    lookup_field = 'id'
+
+
+class If_else_sensor_stringList(generics.ListCreateAPIView):
+    queryset = If_else_sensor_string.objects.all()
+    serializer_class = If_else_sensor_stringSerializer
+
+
+class If_else_sensor_stringUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = If_else_sensor_string.objects.all()
+    serializer_class = If_else_sensor_stringSerializer
+    lookup_field = 'id'
+
+
+class If_else_sensor_booleanList(generics.ListCreateAPIView):
+    queryset = If_else_sensor_boolean.objects.all()
+    serializer_class = If_else_sensor_booleanSerializer
+
+
+class If_else_sensor_booleanUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = If_else_sensor_boolean.objects.all()
+    serializer_class = If_else_sensor_booleanSerializer
+    lookup_field = 'id'
+
+
+class If_else_sensor_dadosensorList(generics.ListCreateAPIView):
+    queryset = If_else_sensor_dadosensor.objects.all()
+    serializer_class = If_else_sensor_dadosensorSerializer
+
+
+class If_else_sensor_dadosensorUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = If_else_sensor_dadosensor.objects.all()
+    serializer_class = If_else_sensor_dadosensorSerializer
+    lookup_field = 'id'
+
+
+class If_else_sensor_numeroList(generics.ListCreateAPIView):
+    queryset = If_else_sensor_numero.objects.all()
+    serializer_class = If_else_sensor_numeroSerializer
+
+
+class If_else_sensor_numeroUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = If_else_sensor_numero.objects.all()
+    serializer_class = If_else_sensor_numeroSerializer
     lookup_field = 'id'
