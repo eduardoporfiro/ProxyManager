@@ -30,7 +30,12 @@ class Task(models.Model):
         (8, 'if_sensor_boolean'),
         (9, 'if_sensor_dadosensor'),
         (10, 'atuador_troca_estado'),
-        (11, 'atuador_boolean')
+        (11, 'atuador_boolean'),
+        (12, 'if_else_sensor_string'),
+        (13, 'if_else_sensor_boolena'),
+        (14, 'if_else_sensor_dadosensorstring'),
+        (15, 'if_else_sensor_dadosensornumero'),
+        (16, 'if_else_sensor_number')
     ]
     tipo = models.IntegerField(choices=Tipos, default=0)
     comando = models.CharField(max_length=200)
@@ -135,6 +140,31 @@ class If_sensor_string(Task):
                     self.task_sucessor.start(payload, dipo_pk)
 
 
+class if_else_sensor_string(Task):
+    Condicao = [
+        (0,'='),
+        (1,'!=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.CharField(max_length=200)
+    elsetask = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+    def start(self, payload, dipo_pk):
+        if self.task_sucessor != None:
+            if self.condicao == 0:
+                if payload == self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask !=None:
+                        self.elsetask.start(payload, dipo_pk)
+            else:
+                if payload != self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+
 class If_sensor_numero(Task):
     Condicao = [
         (0, '='),
@@ -177,6 +207,61 @@ class If_sensor_numero(Task):
                     self.task_sucessor.start(payload, dipo_pk)
 
 
+class if_else_sensor_numero(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!='),
+        (2,'>'),
+        (3,'>='),
+        (4,'<'),
+        (5,'<=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.IntegerField()
+    elsetask = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+    def start(self, payload, dipo_pk):
+        if self.task_sucessor != None:
+            if self.condicao == 0:
+                if self.valor == int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 1:
+                if self.valor != int(payload):
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 2:
+                if int(payload) > self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+
+            elif self.condicao == 3:
+                if int(payload) >= self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 4:
+                if int(payload) < self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 5:
+                if int(payload) <= self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+
 class If_sensor_dadosensor(Task):
     Condicao = [
         (0, '='),
@@ -215,6 +300,64 @@ class If_sensor_dadosensor(Task):
                     self.task_sucessor.start(payload, dipo_pk)
 
 
+class If_else_sensor_dadosensor(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!='),
+        (2, '>'),
+        (3, '>='),
+        (4, '<'),
+        (5, '<=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='If_sensor_dadosensor')
+    elsetask = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='If_else_sensor_dadosensor')
+
+    def start(self, payload, dipo_pk):
+        if self.valor != None and self.task_sucessor != None:
+            if self.condicao == 0:
+                if payload == self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 1:
+                if payload != self.valor.start(payload, dipo_pk):
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 2:
+                if self.valor.start(payload, dipo_pk) > payload:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 3:
+                if self.valor.start(payload, dipo_pk) >= payload:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 4:
+                if self.valor.start(payload, dipo_pk) < payload:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+            elif self.condicao == 5:
+                if self.valor.start(payload, dipo_pk) <= payload:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+
+
 class If_sensor_boolean(Task):
     Condicao = [
         (0, '='),
@@ -231,6 +374,31 @@ class If_sensor_boolean(Task):
             else:
                 if bool(payload) != self.valor:
                     self.task_sucessor.start(payload, dipo_pk)
+
+
+class If_else_sensor_boolean(Task):
+    Condicao = [
+        (0, '='),
+        (1, '!=')
+    ]
+    condicao = models.IntegerField(choices=Condicao)
+    valor = models.NullBooleanField()
+    elsetask = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+    def start(self, payload, dipo_pk):
+        if self.task_sucessor != None:
+            if self.condicao == 0:
+                if bool(payload) == self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
+            else:
+                if bool(payload) != self.valor:
+                    self.task_sucessor.start(payload, dipo_pk)
+                else:
+                    if self.elsetask != None:
+                        self.elsetask.start(payload, dipo_pk)
 
 
 class Atuador_troca_estado(Task):
