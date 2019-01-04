@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('if_else_sensor_numero/', views.If_else_sensor_numeroList.as_view(), name='if_else_sensor_numero'),
     path('<int:id>/if_else_sensor_numeroUpdate/', views.If_else_sensor_numeroUpdateDelete.as_view(),
-         name='if_else_sensor_dadosensor_update'),
+         name='if_else_sensor_numero_update'),
 
     path('dado/', views.DadoList.as_view(), name='dadolist'),
 ]
