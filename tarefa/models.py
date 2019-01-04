@@ -415,7 +415,7 @@ class If_else_sensor_boolean(Task):
 
 class Atuador_troca_estado(Task):
     estado_anterior = models.BooleanField(default=True)
-    estado_atual = models.BooleanField(default=False)
+    estado_atual = models.BooleanField(default=False )
     atuador = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
 
     def start(self, payload, dipo_pk):
