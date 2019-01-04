@@ -423,7 +423,7 @@ class Atuador_troca_estado(Task):
         if self.estado_anterior is None:
             self.estado_anterior = True
         if self.estado_atual is None:
-            self.estado_atual = True
+            self.estado_atual = False
         super(Atuador_troca_estado, self).save()
 
     def start(self, payload, dipo_pk):
