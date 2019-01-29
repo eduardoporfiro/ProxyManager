@@ -4,6 +4,15 @@ from tarefa.serializers import *
 
 
 class DispositivoList(generics.ListCreateAPIView):
+    """
+    Retorna uma lista de Dispositivo
+
+    post:
+    Crie um novo dispositivo
+
+    get:
+    Liste os dispositivos disponíveis
+    """
     queryset = Dispositivo.objects.all()
     serializer_class = DispositivoSerializer
     filter_fields = ('nome', 'tipo', 'mqtt', 'id')
