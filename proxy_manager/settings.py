@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,13 +21,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6%e4d76^ml_6vip89pfu(@@)vpb4r7&+xxpql90m0+2y&d+($2'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-from socket import gethostname, gethostbyname
-ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ]
-ALLOWED_HOSTS = ['localhost','192.168.0.100','proxymanager.ddns.net','192.168.1.200']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 
 # Application definition
@@ -94,17 +93,17 @@ WSGI_APPLICATION = 'proxy_manager.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 DATABASES = {
-    'default' :{
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'proxy_manager',
-        'USER': 'eduardo',
-        'PASSWORD': 'Potterharry1!',
-        'HOST': 'localhost',
-        'POR': '3306'
+    'default': {
+        'ENGINE': config('ENGINE'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': '',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -146,9 +145,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 #Celery Config
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-CELERY_ACCEPT_CONTENT = ['json']
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-LOGIN_URL = 'rest_framework:login'
-LOGOUT_URL = 'rest_framework:logout'
