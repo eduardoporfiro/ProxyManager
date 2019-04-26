@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:9.6.5
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+  redis:
+    hostname: redis
+    image: redis:latest
+  web:
+    build: .
+    command: bash -c "python /code/manage.py migrate --noinput && python /code/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  celery:
+    build: .
+    command: celery -A proxy_manager worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+  celery-beat:
+    build: .
+    command: celery -A proxy_manager beat -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+volumes:
+  postgre_data:
