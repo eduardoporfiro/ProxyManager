@@ -1,12 +1,14 @@
 version: '3'
 
-services:
+services: 
   db:
     image: postgres:9.6.5
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"      
   redis:
     hostname: redis
     image: redis:latest
@@ -26,14 +28,16 @@ services:
     volumes:
       - .:/code
     depends_on:
+      - web
       - db
       - redis
   celery-beat:
     build: .
-    command: celery -A proxy_manager beat -l info
+    command: celery -A proxy_manager beat
     volumes:
       - .:/code
     depends_on:
+      - web
       - db
       - redis
 volumes:
